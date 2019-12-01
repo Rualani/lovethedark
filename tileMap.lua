@@ -13,22 +13,23 @@ function loadMap()
    tileMap.DarkTile2 = love.graphics.newImage("img/2DarkTile.png")
    tileMap.DarkTile3 = love.graphics.newImage("img/3DarkTile.png")
 
+   -- Create stateMap and initialize it to base room pattern
    tileMap.stateMap = {}
-   for rows = 1, tileMap.numTiles do
+   for rows = 1, tileMap.numTiles, 1 do
       tileMap.stateMap[rows] = {}
-      for cols = 1, tileMap.numTiles do
+      for cols = 1, tileMap.numTiles, 1 do
          tileMap.stateMap[rows][cols] = 0
       end
    end
 
 end
 
-function drawTile(img)
-
+function drawTile(tile, x, y)
+  love.graphics.draw(tile, x - tileMap.tilesize, y - tileMap.tilesize)
 end
 
 function getTileImg(row, column)
    if tileMap.stateMap[row][column] == 0 then
-      return BaseTile
+      return tileMap.BaseTile
    end
 end
