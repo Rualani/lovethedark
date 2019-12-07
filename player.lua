@@ -1,40 +1,72 @@
-player = {}
-player.x = resWidth/2
-player.y = resHeight/2
-player.speed = 200
-player.shadowed = false
-player.pure = true
-player.xtile = math.floor(player.x)
-player.ytile = math.floor(player.y)
+Player = {}
+Player.x = resWidth/2
+Player.y = resHeight/2
+Player.speed = 200
+Player.shadowed = false
+Player.xtile = math.floor(Player.x / 32)
+Player.ytile = math.floor(Player.y / 32)
+Player.health = 2
+Player.lengthinshadows = 0
+Player.shadowresistance = 2
+Player.damaged = false
+Player.width = 32
+Player.height = 32
+Player.score = 0
+
+function Player.resetState()
+
+end
 
 function playerUpdate(dt)
 
-   -- COLLISIONS AND STUFF LOL
-   player.xtile = math.floor(player.x)
-   player.ytile = math.floor(player.y)
+   -- Bounds checking so bad things don't really happen. OK?
+   if (Player.x < 0) then
+      Player.x = 0
+   end
+   if (Player.x > 608) then
+      Player.x = 608
+   end
+   if (Player.y < 0) then
+      Player.y = 0
+   end
+   if (Player.y > 608) then
+      Player.y = 608
+   end
+
+   -- Which tile player is on
+   Player.xtile = math.floor(Player.x / 32) + 1
+   Player.ytile = math.floor(Player.y / 32) + 1
+
+   -- You've been in the shadows too long...
+   if (Player.shadowed == true) then
+      Player.lengthinshadows = Player.lengthinshadows + dt
+   end
+   if (Player.lengthinshadows > 2) then
+      Player.health = Player.health - 1
+      Player.lengthinshadows = 0
+   end
 
    -- Don't worry, You aren't shadowed, be pure and whole
-   
-
-
+   if tileMap.stateMap[Player.ytile][Player.xtile] == 0 then
+      Player.shadowed = false
+      Player.lengthinshadows = 0
+   end
    -- Something... is there isn't it. It hurts... doesn't it?
-
-
+   if tileMap.stateMap[Player.ytile][Player.xtile] >= 1 then
+      Player.shadowed = true
+   end
 
    -- change to new position based on keyboard input
   if love.keyboard.isDown("w") then
-    player.y = player.y - player.speed * dt
+    Player.y = Player.y - Player.speed * dt
   end
   if love.keyboard.isDown("s") then
-    player.y = player.y + player.speed * dt
+    Player.y = Player.y + Player.speed * dt
   end
   if love.keyboard.isDown("a") then
-    player.x = player.x - player.speed * dt
+    Player.x = Player.x - Player.speed * dt
   end
   if love.keyboard.isDown("d") then
-    player.x = player.x + player.speed * dt
+    Player.x = Player.x + Player.speed * dt
   end
-
-
-
 end

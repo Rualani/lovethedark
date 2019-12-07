@@ -1,5 +1,4 @@
 function pulse(tileMap)
-
    -- Fills outer layer with darkness every pulse
    cols = 1
    rows = 1
@@ -63,5 +62,13 @@ function applyGrowths(i, j)
    end
    if j ~= 1 then
       tileMap.growths[i][j-1] = tileMap.stateMap[i][j-1] + 1
+   end
+end
+
+function thingUpdate(dt)
+   for i = 1, tileMap.numTiles, 1 do
+     for j = 1, tileMap.numTiles, 1 do
+         tileMap.stateMap[i][j] = tileMap.stateMap[i][j] + tileMap.growths[i][j]
+     end
    end
 end

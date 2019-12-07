@@ -2,7 +2,6 @@
 -- Objects essentially does all thing tile based.
 -- Tile map is a 20 by 20 grid of 32 bits each. Pretty simple... Hopefully
 
-
 function loadMap()
    tileMap = {}
    tileMap.tilesize = 32
@@ -30,8 +29,18 @@ function loadMap()
          tileMap.growths[rows][cols] = 0
       end
    end
-
 end
+
+-- function tileMap.resetState()
+--    -- Reset state table
+--    for rows = 1, tileMap.numTiles, 1 do
+--       tileMap.stateMap[rows] = {}
+--       for cols = 1, tileMap.numTiles, 1 do
+--          tileMap.stateMap[rows][cols] = 0
+--       end
+--    end
+--    -- Reset growth matrix
+-- end
 
 function drawTile(tile, x, y)
   love.graphics.draw(tile, x - tileMap.tilesize, y - tileMap.tilesize)
