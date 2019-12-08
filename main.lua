@@ -10,6 +10,10 @@ function love.load()
    require("thing")
    require("damage")
    require("menus")
+   require("fireball")
+
+   -- Fireball container... Yep
+   explosions = {}
 
    --holding all sprites images for drawing
    sprites = {}
@@ -31,7 +35,7 @@ end
 function love.update(dt)
 
    if menus.gameon == true then
-     -- somethings state changes...?
+     -- Update the shadows
      pulsetimer = pulsetimer - dt
      if pulsetimer < 0 then
         pulsetimer = pulsepace
@@ -39,8 +43,16 @@ function love.update(dt)
         pulse(tileMap)
      end
 
+
      thingUpdate()
      playerUpdate(dt)
+
+     -- Update the fireball positions
+      for i,f in ipairs(explosions) do
+         f.x = f.x + math.cos(f.angle) * f.speed * dt
+         f.y = f.y + math.sin(f.angle) * f.speed * dt
+      end
+
 
      -- Checking all the tiles for damage conditions and all that jazz
      for i = 1, tileMap.numTiles, 1 do
@@ -55,6 +67,8 @@ function love.update(dt)
   elseif menus.gameover == true then
       menuUpdate(dt)
   end
+
+
 end
 
 function love.draw()
@@ -74,6 +88,10 @@ function love.draw()
      love.graphics.printf("Health : " .. Player.health, 0, love.graphics.getHeight() - 600, love.graphics.getWidth() - 600, "center")
      -- Draw sprites on top of ... tile map
      love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1, 1, Player.width/2, Player.height/2, kx, ky)
+     -- Draw all the fireballs
+      for i,f in ipairs(explosions) do
+         love.graphics.draw(sprites.PlayerImage, f.x, f.y, 0, .5, .5, Player.width/2, Player.height/2, kx, ky)
+      end
    elseif menus.gameover == true then
       love.graphics.printf("Game", font, 200, 180, resWidth, "justify",r,sx,sy,ox,oy,kx,ky)
       love.graphics.printf("Over", font, 200, 230, resWidth, "justify",r,sx,sy,ox,oy,kx,ky)
@@ -88,6 +106,11 @@ function love.mousepressed(x, y, button, isTouch)
       menus.gameover = false
       menus.gameon = true
       resetState()
+   end
+   if menus.gameon == true then
+      tempx = love.mouse.getX()
+      tempy = love.mouse.getY()
+      spawnFireball(Player.x, Player.y, tempx, tempy)
    end
 end
 
