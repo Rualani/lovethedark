@@ -5,16 +5,17 @@ Player.speed = 200
 Player.shadowed = false
 Player.xtile = math.floor(Player.x / 32)
 Player.ytile = math.floor(Player.y / 32)
-Player.health = 2
+Player.health = 5
 Player.lengthinshadows = 0
 Player.shadowresistance = 2
 Player.damaged = false
 Player.width = 32
 Player.height = 32
 Player.score = 0
+Player.maxhealth = 5
 
 function Player.resetState()
-
+   Player.health = Player.maxhealth
 end
 
 function playerUpdate(dt)

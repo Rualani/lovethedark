@@ -7,12 +7,12 @@ menus.gameon = true
 menus.gameovertimer = 0
 
 
-function menuUpdate(dt)
+function menuUpdate(time)
    if (Player.health == 0) then
       menus.gameon = false
       menus.gameover = true
    end
    if menus.gameover == true then
-      --menus.gameovertimer = menus.gameovertimer + dt
+      menus.gameovertimer = menus.gameovertimer + time
    end
 end

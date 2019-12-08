@@ -50,6 +50,10 @@ function slowGrowth(i, j)
 end
 
 function applyGrowths(i, j)
+   -- The thing fears the flame
+   if (tileMap.burning == 1) then
+      return
+   end
    -- Top Tile CLaimed
    if i ~= 1 then
       tileMap.growths[i-1][j] = tileMap.stateMap[i-1][j] + 1

@@ -42,11 +42,18 @@ function love.update(dt)
      thingUpdate()
      playerUpdate(dt)
 
+     -- Checking all the tiles for damage conditions and all that jazz
+     for i = 1, tileMap.numTiles, 1 do
+        for j = 1, tileMap.numTiles, 1 do
+           tileUpdate(dt, i, j)
+        end
+     end
+
      --In charge of change damage states and starting damage animations
      --damageCalculations()
      menuUpdate(dt)
   elseif menus.gameover == true then
-      menuUpdate()
+      menuUpdate(dt)
   end
 end
 
@@ -81,9 +88,6 @@ function love.mousepressed(x, y, button, isTouch)
       menus.gameover = false
       menus.gameon = true
       resetState()
-   elseif menus.gameon == true then
-      menus.gameover = true
-      menus.gameon = false
    end
 end
 

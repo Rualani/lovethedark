@@ -2,7 +2,6 @@
 -- Objects essentially does all thing tile based.
 -- Tile map is a 20 by 20 grid of 32 bits each. Pretty simple... Hopefully
 
-function loadMap()
    tileMap = {}
    tileMap.tilesize = 32
    tileMap.mapsize = 640
@@ -12,6 +11,8 @@ function loadMap()
    tileMap.DarkTile2 = love.graphics.newImage("img/2DarkTile.png")
    tileMap.DarkTile3 = love.graphics.newImage("img/3DarkTile.png")
 
+-- Creates all the pretty objects
+function loadMap()
    -- Create stateMap and initialize it to base room pattern
    tileMap.stateMap = {}
    for rows = 1, tileMap.numTiles, 1 do
@@ -29,18 +30,42 @@ function loadMap()
          tileMap.growths[rows][cols] = 0
       end
    end
+
+   -- This is the part of the story where I regret not using objects and end up
+   -- with way too many matrices to check a variety of conditions since I strictly
+   -- bounds checked and shrank down the conditions allowed on my original state table.
+   -- I'm sad. Also, a state of 1 means it's burning. HAHAHAHAHAHAHAHAHAHA. ; , ;
+   tileMap.burning = {}
+   for row = 1, tileMap.numTiles, 1 do
+      tileMap.burning[rows] = {}
+      for cols = 1, tileMap.numTiles, 1 do
+         tileMap.burning[rows][cols] = 0
+      end
+   end
 end
 
--- function tileMap.resetState()
---    -- Reset state table
---    for rows = 1, tileMap.numTiles, 1 do
---       tileMap.stateMap[rows] = {}
---       for cols = 1, tileMap.numTiles, 1 do
---          tileMap.stateMap[rows][cols] = 0
---       end
---    end
---    -- Reset growth matrix
--- end
+--Of course this file needed an update function too. Just wouldn't feel right without it.
+function tileUpdate(dt, rows, cols) 
+
+end
+
+-- For game over condition
+function tileMap:resetState()
+   -- Reset state table
+   for rows = 1, tileMap.numTiles, 1 do
+      tileMap.stateMap[rows] = {}
+      for cols = 1, tileMap.numTiles, 1 do
+         tileMap.stateMap[rows][cols] = 0
+      end
+   end
+   -- Reset growth matrix
+   for rows = 1, tileMap.numTiles, 1 do
+      tileMap.growths[rows] = {}
+      for cols = 1, tileMap.numTiles, 1 do
+         tileMap.growths[rows][cols] = 0
+      end
+   end
+end
 
 function drawTile(tile, x, y)
   love.graphics.draw(tile, x - tileMap.tilesize, y - tileMap.tilesize)
@@ -64,4 +89,42 @@ function getTileImg(row, column)
    elseif tileMap.stateMap[row][column] == 3 then
       return tileMap.DarkTile3
   end
+end
+
+-- These functions allow for multiple abilities to impact and damage cells
+
+-- Explosion ability. First cell detonates and casts burn on all other cells
+-- Given that the cell was in shadows score is upticked by one
+function iExplode(i,j)
+   iBurn(i,j)      -- Center
+   iBurn(i-1,j)    -- Top
+   iBurn(i-1,j+1)  -- TopRight
+   iBurn(i,j+1)    -- Right
+   iBurn(i+1, j+1) -- BottomRight
+   iBurn(i+1, j)   -- Bottom
+   iBurn(i+1, j-1) -- BottomLeft
+   iBurn(i, j-1)   -- Left
+   iBurn(i-1,j-1)  -- TopLeft
+end
+
+function iBurn(i, j) --Since the cell is casting on itself I can do bounds checking. Muahaha. Baka
+   --Bounds checking
+   if (1 <= i <= 20 and 1 <= j <= 20) then
+      -- Score check
+      if (tileMap.stateMap[i][j] > 0) then
+         Player.score = Player.score + 1
+      end
+      -- Through the sheer power of deduction we found that the witch must have been made of wood
+      -- and could float. Ducks could, also, float in water which she happened to weight the same as.
+      -- Thus with our premises tied up we proved that she was in fact a witch and very flammable.
+      tileMap.burning[i][j] = 1
+   end
+end
+
+function iRobot() --??
+
+end
+
+function iPad() --Plz stop
+
 end
