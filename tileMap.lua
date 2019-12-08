@@ -36,7 +36,7 @@ function loadMap()
    -- bounds checked and shrank down the conditions allowed on my original state table.
    -- I'm sad. Also, a state of 1 means it's burning. HAHAHAHAHAHAHAHAHAHA. ; , ;
    tileMap.burning = {}
-   for row = 1, tileMap.numTiles, 1 do
+   for rows = 1, tileMap.numTiles, 1 do
       tileMap.burning[rows] = {}
       for cols = 1, tileMap.numTiles, 1 do
          tileMap.burning[rows][cols] = 0
@@ -45,7 +45,7 @@ function loadMap()
 end
 
 --Of course this file needed an update function too. Just wouldn't feel right without it.
-function tileUpdate(dt, rows, cols) 
+function tileUpdate(dt, rows, cols)
 
 end
 
