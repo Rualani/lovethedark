@@ -75,4 +75,5 @@ function thingUpdate(dt)
          tileMap.stateMap[i][j] = tileMap.stateMap[i][j] + tileMap.growths[i][j]
      end
    end
+   clearGrowths()
 end

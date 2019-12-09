@@ -49,6 +49,16 @@ function tileUpdate(dt, rows, cols)
 
 end
 
+-- Clears growths tree
+function clearGrowths()
+   for rows = 1, tileMap.numTiles, 1 do
+      tileMap.growths[rows] = {}
+      for cols = 1, tileMap.numTiles, 1 do
+         tileMap.growths[rows][cols] = 0
+      end
+   end
+end
+
 -- For game over condition
 function tileMap:resetState()
    -- Reset state table
@@ -109,10 +119,11 @@ end
 
 function iBurn(i, j) --Since the cell is casting on itself I can do bounds checking. Muahaha. Baka
    --Bounds checking
-   if (1 <= i <= 20 and 1 <= j <= 20) then
+   if (1 <= i) and (i <= 20) and (1 <= j) and (j <= 20) then
       -- Score check
       if (tileMap.stateMap[i][j] > 0) then
          Player.score = Player.score + 1
+         tileMap.stateMap[i][j] = 0
       end
       -- Through the sheer power of deduction we found that the witch must have been made of wood
       -- and could float. Ducks could, also, float in water which she happened to weight the same as.

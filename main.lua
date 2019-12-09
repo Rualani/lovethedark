@@ -51,6 +51,15 @@ function love.update(dt)
       for i,f in ipairs(explosions) do
          f.x = f.x + math.cos(f.angle) * f.speed * dt
          f.y = f.y + math.sin(f.angle) * f.speed * dt
+         -- Check For explode
+         boom(f.x, f.y, f)
+      end
+
+      -- remove fireballs if exploded
+      for i = #explosions,1,-1 do
+            if explosions[i].exploded == true then
+               table.remove(explosions,i)
+            end
       end
 
 
@@ -86,6 +95,8 @@ function love.draw()
      love.graphics.printf("Playerlengthshadows" .. Player.lengthinshadows, 0, love.graphics.getHeight() - 100, love.graphics.getWidth(), "center")
      love.graphics.printf("X,Y" .. Player.xtile .. "," .. Player.ytile, 0, love.graphics.getHeight() - 200, love.graphics.getWidth(), "center")
      love.graphics.printf("Health : " .. Player.health, 0, love.graphics.getHeight() - 600, love.graphics.getWidth() - 600, "center")
+     love.graphics.printf("Score : " .. Player.score, 0, love.graphics.getHeight() - 500, love.graphics.getWidth() - 600, "center")
+
      -- Draw sprites on top of ... tile map
      love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1, 1, Player.width/2, Player.height/2, kx, ky)
      -- Draw all the fireballs
