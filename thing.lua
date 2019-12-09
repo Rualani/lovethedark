@@ -31,6 +31,11 @@ function pulse(tileMap)
          end
       end
    end
+
+   -- fire sways with the pulse as well
+   for i,b in ipairs(burningtiles) do
+      b.burningtime = b.burningtime + 1
+   end
 end
 
 function fastGrowth(i, j)

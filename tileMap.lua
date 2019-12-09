@@ -48,14 +48,7 @@ end
 
 --Of course this file needed an update function too. Just wouldn't feel right without it.
 function tileUpdate(dt, rows, cols)
-   for i = #burningtiles,1,-1 do
-      if burningtiles[i].burningtime > 3 then
-         tileMap.burning[rows][cols] = 0
-         table.remove(burningtiles,i)
-      else
-         burningtiles[i].burningtime = burningtiles[i].burningtime + dt
-      end
-   end
+
 end
 
 -- Clears growths tree
@@ -87,7 +80,10 @@ function tileMap:resetState()
 end
 
 function drawTile(tile, x, y)
-  love.graphics.draw(tile, x - tileMap.tilesize, y - tileMap.tilesize)
+   if (tile == nil) then
+      return
+   end
+   love.graphics.draw(tile, x - tileMap.tilesize, y - tileMap.tilesize)
 end
 
 function getTileImg(row, column)
@@ -110,6 +106,12 @@ function getTileImg(row, column)
   end
 end
 
+function getTileEffectImg(row, column)
+   -- Bounds checking already active on Effects
+   if tileMap.burning[row][column] == 1 then
+      return sprites.burntImage
+   end
+end
 -- These functions allow for multiple abilities to impact and damage cells
 
 -- Explosion ability. First cell detonates and casts burn on all other cells
@@ -138,6 +140,7 @@ function iBurn(i, j) --Since the cell is casting on itself I can do bounds check
       -- and could float. Ducks could, also, float in water which she happened to weight the same as.
       -- Thus with our premises tied up we proved that she was in fact a witch and very flammable.
       tileMap.burning[i][j] = 1
+      spawnBurningTile(i, j)
    end
 end
 
@@ -147,7 +150,7 @@ function spawnBurningTile(x, y)
       BurntTile.x = x
       BurntTile.y = y
 
-      table.insert(BurntTile, burningtiles)
+      table.insert(burningtiles, BurntTile)
 end
 
 

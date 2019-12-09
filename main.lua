@@ -14,19 +14,22 @@ function love.load()
 
    -- Fireball container... burning tiles container... catastrophe
    explosions = {}
-   burningtiles = {}
+
 
    --holding all sprites images for drawing
    sprites = {}
-   sprites.PlayerImage = love.graphics.newImage("img/Player_Placeholder.png")
+   sprites.PlayerImage = love.graphics.newImage("img/Player.png")
+   sprites.flameimage = love.graphics.newImage("img/LightFire.png")
+   sprites.burntImage = love.graphics.newImage("img/BurningAlpha.png")
 
    --Loads tileMap object
    loadMap()
 
    --time before next pulse. Shrink this down to increase the speed of the...thing
-   pulsepace = 1
+   pulsepace = 2
    numpulses = 0
    pulsetimer = pulsepace
+   maxpulse = 3
 
    --Loading Fonts
    font = love.graphics.newFont("Fonts/ShadowsIntoLight-Regular.ttf", 80)
@@ -43,8 +46,8 @@ function love.update(dt)
         numpulses = numpulses + 1
         pulse(tileMap)
      end
-     if numpulses == 3 then
-        pulsepace = pulsepace * .99
+     if numpulses == maxpulse then
+        pulsepace = pulsepace * .98
         numpulses = 0
      end
 
@@ -66,11 +69,19 @@ function love.update(dt)
             end
       end
 
-
      -- Checking all the tiles for damage conditions and all that jazz
-     for i = 1, tileMap.numTiles, 1 do
-        for j = 1, tileMap.numTiles, 1 do
-           tileUpdate(dt, i, j)
+     -- for i = 1, tileMap.numTiles, 1 do
+     --    for j = 1, tileMap.numTiles, 1 do
+     --       tileUpdate(dt, i, j)
+     --    end
+     -- end
+
+
+
+     for i = #burningtiles,1,-1 do
+        if burningtiles[i].burningtime > 1 then
+           tileMap.burning[burningtiles[i].x][burningtiles[i].y] = 0
+           table.remove(burningtiles,i)
         end
      end
 
@@ -95,14 +106,23 @@ function love.draw()
          drawTile(tile, x, y)
        end
      end
+
+     -- Draw Effects on tiles
+     for i = #burningtiles,1,-1 do
+         tile = getTileEffectImg(burningtiles[i].x, burningtiles[i].y)
+         x = burningtiles[i].x * tileMap.tilesize
+         y = burningtiles[i].y * tileMap.tilesize
+         drawTile(tile, y, x)
+     end
+
      -- Draw pulse timer on top of map tiles
-     love.graphics.printf("Playerlengthshadows" .. Player.lengthinshadows, 0, love.graphics.getHeight() - 100, love.graphics.getWidth(), "center")
-     love.graphics.printf("X,Y" .. Player.xtile .. "," .. Player.ytile, 0, love.graphics.getHeight() - 200, love.graphics.getWidth(), "center")
+     --love.graphics.printf("Playerlengthshadows" .. Player.lengthinshadows, 0, love.graphics.getHeight() - 100, love.graphics.getWidth(), "center")
+     --love.graphics.printf("X,Y" .. Player.xtile .. "," .. Player.ytile, 0, love.graphics.getHeight() - 200, love.graphics.getWidth(), "center")
      love.graphics.printf("Health : " .. Player.health, 0, love.graphics.getHeight() - 600, love.graphics.getWidth() - 600, "center")
      love.graphics.printf("Score : " .. Player.score, 0, love.graphics.getHeight() - 500, love.graphics.getWidth() - 600, "center")
 
      -- Draw sprites on top of ... tile map
-     love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1, 1, Player.width/2, Player.height/2, kx, ky)
+     love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1.5, 1.5, Player.width/2, Player.height/2, kx, ky)
      -- Draw all the fireballs
       for i,f in ipairs(explosions) do
          love.graphics.draw(sprites.PlayerImage, f.x, f.y, 0, .5, .5, Player.width/2, Player.height/2, kx, ky)
