@@ -12,8 +12,9 @@ function love.load()
    require("menus")
    require("fireball")
 
-   -- Fireball container... Yep
+   -- Fireball container... burning tiles container... catastrophe
    explosions = {}
+   burningtiles = {}
 
    --holding all sprites images for drawing
    sprites = {}
@@ -42,7 +43,10 @@ function love.update(dt)
         numpulses = numpulses + 1
         pulse(tileMap)
      end
-
+     if numpulses == 3 then
+        pulsepace = pulsepace * .99
+        numpulses = 0
+     end
 
      thingUpdate()
      playerUpdate(dt)
@@ -113,7 +117,8 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
    -- Resets if gameover
-   if menus.gameover == true then
+   if menus.gameover == true and menus.gameovertimer > 3 then
+      menus.gameovertimer = 0
       menus.gameover = false
       menus.gameon = true
       resetState()

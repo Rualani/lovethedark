@@ -22,11 +22,11 @@ function pulse(tileMap)
    -- It grows...
    for i = 1, tileMap.numTiles, 1 do
       for j = 1, tileMap.numTiles, 1 do
-         if tileMap.stateMap[i][j] == 1 then
+         if tileMap.stateMap[i][j] == 1 and tileMap.burning[i][j] == 0 then
             slowGrowth(i, j)
-         elseif tileMap.stateMap[i][j] == 2 then
+         elseif tileMap.stateMap[i][j] == 2 and tileMap.burning[i][j] == 0 then
             growth(i, j)
-         elseif tileMap.stateMap[i][j] == 3 then
+         elseif tileMap.stateMap[i][j] == 3 and tileMap.burnign[i][j] == 0 then
             fastGrowth(i, j)
          end
       end

@@ -42,11 +42,20 @@ function loadMap()
          tileMap.burning[rows][cols] = 0
       end
    end
+
+   burningtiles = {}
 end
 
 --Of course this file needed an update function too. Just wouldn't feel right without it.
 function tileUpdate(dt, rows, cols)
-
+   for i = #burningtiles,1,-1 do
+      if burningtiles[i].burningtime > 3 then
+         tileMap.burning[rows][cols] = 0
+         table.remove(burningtiles,i)
+      else
+         burningtiles[i].burningtime = burningtiles[i].burningtime + dt
+      end
+   end
 end
 
 -- Clears growths tree
@@ -131,6 +140,16 @@ function iBurn(i, j) --Since the cell is casting on itself I can do bounds check
       tileMap.burning[i][j] = 1
    end
 end
+
+function spawnBurningTile(x, y)
+      BurntTile = {}
+      BurntTile.burningtime = 0
+      BurntTile.x = x
+      BurntTile.y = y
+
+      table.insert(BurntTile, burningtiles)
+end
+
 
 function iRobot() --??
 

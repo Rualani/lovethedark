@@ -13,6 +13,7 @@ Player.width = 32
 Player.height = 32
 Player.score = 0
 Player.maxhealth = 5
+Player.maxshadows = 1
 
 function Player.resetState()
    Player.health = Player.maxhealth
@@ -42,7 +43,7 @@ function playerUpdate(dt)
    if (Player.shadowed == true) then
       Player.lengthinshadows = Player.lengthinshadows + dt
    end
-   if (Player.lengthinshadows > 2) then
+   if (Player.lengthinshadows > Player.maxshadows) then
       Player.health = Player.health - 1
       Player.lengthinshadows = 0
    end
