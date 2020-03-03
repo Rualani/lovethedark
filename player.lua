@@ -13,7 +13,8 @@ Player.width = 32
 Player.height = 32
 Player.score = 0
 Player.maxhealth = 5
-Player.maxshadows = 1
+Player.maxshadows = 2
+Player.timeonfire = 0
 
 function Player.resetState()
    Player.health = Player.maxhealth
@@ -44,7 +45,7 @@ function playerUpdate(dt)
       Player.lengthinshadows = Player.lengthinshadows + dt
    end
    if (Player.lengthinshadows > Player.maxshadows) then
-      Player.health = Player.health - 1
+      playerDamaged()
       Player.lengthinshadows = 0
    end
 
@@ -57,6 +58,23 @@ function playerUpdate(dt)
    if tileMap.stateMap[Player.ytile][Player.xtile] >= 1 then
       Player.shadowed = true
    end
+
+   -- Don't stand in the fire.
+   if tileMap.burning[Player.ytile][Player.xtile] == 1 then
+      if (Player.timeonfire == 0) then
+         playerDamaged()
+         Player.timeonfire = Player.timeonfire + dt
+      elseif Player.timeonfire > 2 then
+         playerDamaged()
+         Player.timeonfire = 0
+         Player.timeonfire = Player.timeonfire + dt
+      else
+         Player.timeonfire = Player.timeonfire + dt
+      end
+   elseif tileMap.burning[Player.ytile][Player.xtile] == 0 then
+      Player.timeonfire = 0
+   end
+
 
    -- change to new position based on keyboard input
   if love.keyboard.isDown("w") then

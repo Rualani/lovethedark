@@ -15,12 +15,23 @@ function love.load()
    -- Fireball container... burning tiles container... catastrophe
    explosions = {}
 
+   -- Sound Effects!!!
+   firesound = love.audio.newSource("Sounds/foom_0.wav", "static")
+   firesound:setVolume(0.4)
+   firesound:setPitch(0.4)
+   gameoversound = love.audio.newSource("Sounds/Kim Lightyear - And Then We Left.mp3", "static")
+   grunt = love.audio.newSource("Sounds/ACK.mp3", "static")
+   deathsound = love.audio.newSource("Sounds/DeathSound.mp3","static")
+   gameonmusic = love.audio.newSource("Sounds/Juhani Junkala [Retro Game Music Pack] Level 1.wav", "static")
+   gameonmusic:setLooping(true)
+   gameonmusic:setVolume(0.5)
 
    --holding all sprites images for drawing
    sprites = {}
    sprites.PlayerImage = love.graphics.newImage("img/Player.png")
    sprites.flameimage = love.graphics.newImage("img/LightFire.png")
    sprites.burntImage = love.graphics.newImage("img/BurningAlpha.png")
+   sprites.PlayerOuchImage = love.graphics.newImage("img/ouch.png")
 
    --Loads tileMap object
    loadMap()
@@ -29,16 +40,20 @@ function love.load()
    pulsepace = 2
    numpulses = 0
    pulsetimer = pulsepace
-   maxpulse = 3
+   maxpulse = 2
 
    --Loading Fonts
    font = love.graphics.newFont("Fonts/ShadowsIntoLight-Regular.ttf", 80)
+   otherfont = love.graphics.newFont("Fonts/ShadowsIntoLight-Regular.ttf", 30)
 
 end
 
 function love.update(dt)
 
    if menus.gameon == true then
+
+      -- Cue the music?
+      gameonmusic:play()
      -- Update the shadows
      pulsetimer = pulsetimer - dt
      if pulsetimer < 0 then
@@ -118,11 +133,16 @@ function love.draw()
      -- Draw pulse timer on top of map tiles
      --love.graphics.printf("Playerlengthshadows" .. Player.lengthinshadows, 0, love.graphics.getHeight() - 100, love.graphics.getWidth(), "center")
      --love.graphics.printf("X,Y" .. Player.xtile .. "," .. Player.ytile, 0, love.graphics.getHeight() - 200, love.graphics.getWidth(), "center")
-     love.graphics.printf("Health : " .. Player.health, 0, love.graphics.getHeight() - 600, love.graphics.getWidth() - 600, "center")
-     love.graphics.printf("Score : " .. Player.score, 0, love.graphics.getHeight() - 500, love.graphics.getWidth() - 600, "center")
+     love.graphics.printf("Health : " .. Player.health, otherfont, love.graphics.getWidth() - 600, love.graphics.getHeight() - resHeight, resWidth, "left")
+     love.graphics.printf("Score : " .. Player.score, otherfont, love.graphics.getWidth() - 800, love.graphics.getHeight() - resHeight, resWidth, "right")
 
      -- Draw sprites on top of ... tile map
-     love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1.5, 1.5, Player.width/2, Player.height/2, kx, ky)
+      if (Player.shadowed == true or Player.timeonfire > 0) then
+         love.graphics.draw(sprites.PlayerOuchImage, Player.x, Player.y, 0, 1.5, 1.5, Player.width/2, Player.height/2, kx, ky)
+      else
+        love.graphics.draw(sprites.PlayerImage, Player.x, Player.y, 0, 1.5, 1.5, Player.width/2, Player.height/2, kx, ky)
+      end
+
      -- Draw all the fireballs
       for i,f in ipairs(explosions) do
          love.graphics.draw(sprites.PlayerImage, f.x, f.y, 0, .5, .5, Player.width/2, Player.height/2, kx, ky)
@@ -137,11 +157,8 @@ end
 
 function love.mousepressed(x, y, button, isTouch)
    -- Resets if gameover
-   if menus.gameover == true and menus.gameovertimer > 3 then
-      menus.gameovertimer = 0
-      menus.gameover = false
-      menus.gameon = true
-      resetState()
+   if menus.gameover == true and menus.gameovertimer > 2 then
+      restartGame()
    end
    if menus.gameon == true then
       tempx = love.mouse.getX()

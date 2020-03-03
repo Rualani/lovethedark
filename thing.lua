@@ -61,16 +61,24 @@ function applyGrowths(i, j)
    end
    -- Top Tile CLaimed
    if i ~= 1 then
-      tileMap.growths[i-1][j] = tileMap.stateMap[i-1][j] + 1
+      if tileMap.burning[i-1][j] == 0 then
+         tileMap.growths[i-1][j] = tileMap.stateMap[i-1][j] + 1
+      end
    end
    if i ~= tileMap.numTiles then
-      tileMap.growths[i+1][j] = tileMap.stateMap[i+1][j] + 1
+      if tileMap.burning[i+1][j] == 0 then
+         tileMap.growths[i+1][j] = tileMap.stateMap[i+1][j] + 1
+      end
    end
    if j ~= tileMap.numTiles then
-      tileMap.growths[i][j+1] = tileMap.stateMap[i][j+1] + 1
+      if tileMap.burning[i][j+1] == 0 then
+         tileMap.growths[i][j+1] = tileMap.stateMap[i][j+1] + 1
+      end
    end
    if j ~= 1 then
-      tileMap.growths[i][j-1] = tileMap.stateMap[i][j-1] + 1
+      if tileMap.burning[i][j-1] == 0 then
+         tileMap.growths[i][j-1] = tileMap.stateMap[i][j-1] + 1
+      end
    end
 end
 

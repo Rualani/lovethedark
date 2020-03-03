@@ -12,6 +12,8 @@ function spawnFireball(x, y, tx, ty)
 
    -- Push fireball into vector
    table.insert(explosions, fireball)
+   fireclone = firesound:clone()
+   fireclone:play()
 end
 
 -- Did it go boom?
