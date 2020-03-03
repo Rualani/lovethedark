@@ -7,15 +7,15 @@
 4) Now... You drag the gaming folder ONTO the 2d game icon and the engine automatically does the rest for you
 
 # Controls
-WASD to move the chill firedude around.
-Mouse1 to shoot fireballs. Just shoot fireballs and clear as many shadows as you can before GAME OVER
+1) WASD to move the chill firedude around.
+2) Mouse1 to shoot fireballs. Just shoot fireballs and clear as many shadows as you can before GAME OVER
 
 # Acknowledgements.
-My gaming instructor Andy Harris for teaching me how to make gaming loops and for his superb documentation that happened to mention this unique engine.
-My peers for inspiring me to push harder
+1) My gaming instructor Andy Harris for teaching me how to make gaming loops and for his superb documentation that happened to mention this unique engine.
+2) My peers for inspiring me to push harder
 
 # Music and a few sound effects are from https://opengameart.org/
-https://opengameart.org/content/leave-the-world-tonight
-https://opengameart.org/content/5-chiptunes-action
+1) https://opengameart.org/content/leave-the-world-tonight
+2) https://opengameart.org/content/5-chiptunes-action
 
 
