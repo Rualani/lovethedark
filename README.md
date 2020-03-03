@@ -11,7 +11,7 @@ WASD to move the chill firedude around.
 Mouse1 to shoot fireballs. Just shoot fireballs and clear as many shadows as you can before GAME OVER
 
 # Acknowledgements.
-My gaming instructor Andy Harris for teaching me how to make gaming loops and for his superb documentation that happened to mention this unique engine
+My gaming instructor Andy Harris for teaching me how to make gaming loops and for his superb documentation that happened to mention this unique engine.
 My peers for inspiring me to push harder
 
 # Music and a few sound effects are from https://opengameart.org/
